@@ -1,4 +1,4 @@
-#ระบบจัดการข้อมูลนักศึกษาด้วยJAVA
+#ระบบจัดการข้อมูลนักศึกษาด้วยC++
 #include <iostream>
 #include <fstream>
 #include <string>
