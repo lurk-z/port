@@ -1,0 +1,133 @@
+#ระบบจัดการข้อมูลนักศึกษาด้วยJAVA
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int Menu();
+void AddStudent(string FN);
+void DisplayStudent(string FN);
+void ReportGrade(string FN);
+
+int main() {
+    const string Filename = "student.dat";
+    int c;
+    do {
+        system("cls"); // clear screen
+        c = Menu();
+        switch(c) {
+            case 1: AddStudent(Filename); break;
+            case 2: DisplayStudent(Filename); break;
+            case 3: ReportGrade(Filename); break;
+        }
+    } while(c != 0);
+    cout << "Exit program." << endl;
+    return 0;
+}
+
+int Menu() {
+    string line(25, '=');
+    int Choose;
+    cout << "Program Add-Display-Report Student Data\n";
+    cout << line << endl;
+    cout << ": Main Menu :\n";
+    cout << line << endl;
+    cout << ": 0 - Exit :\n";
+    cout << ": 1 - Add Student :\n";
+    cout << ": 2 - Display Student :\n";
+    cout << ": 3 - Report Grade :\n";
+    cout << line << endl;
+    cout << " Enter choice : ";
+    cin >> Choose;
+    return Choose;
+}
+
+void AddStudent(string FN) {
+    ofstream OutFile(FN.c_str(), ios_base::out | ios_base::app); // open file to append data
+    if (OutFile.is_open()) {
+        string Id, Name;
+        int Score;
+        cout << "\n Add Student \n";
+        cout << "Enter id : ";
+        cin >> Id;
+        cout << "Enter name : ";
+        cin >> Name;
+        cout << "Enter score : ";
+        cin >> Score;
+
+        // write data to file student.dat
+        OutFile << Id << " " << Name << " " << Score << endl;
+        OutFile.close();
+        cout << "\nSaved successfully. Press Enter to continue";
+        cin.ignore(); // to ignore leftover newline character
+        cin.get();    // to wait for Enter
+    } else {
+        cout << "File could not be opened." << endl;
+    }
+}
+
+void DisplayStudent(string FN) {
+    ifstream InFile(FN.c_str(), ios_base::in); // open file for reading
+    if (InFile.is_open()) {
+        string Id, Name;
+        int Score;
+        string line(30, '=');
+        int n = 0;
+        cout << "\nList of Students\n";
+        cout << line << endl;
+        cout << " No.  Id     Name      Score\n";
+        cout << line << endl;
+
+        while (InFile >> Id >> Name >> Score) {
+            n++;
+            cout << right << setw(3) << n << " : " << left << setw(6) << Id << " " << setw(10) << Name << " " << Score << endl;
+        }
+
+        InFile.close();
+        cout << "\nPress Enter to continue";
+        cin.ignore();
+        cin.get();
+    } else {
+        cout << "File could not be opened." << endl;
+    }
+}
+
+void ReportGrade(string FN) {
+    ifstream InFile(FN.c_str(), ios_base::in); // open file for reading
+    if (InFile.is_open()) {
+        string Id, Name;
+        int Score;
+        string line(30, '=');
+        int n = 0;
+        cout << "\nStudent Grade Report\n";
+        cout << line << endl;
+        cout << " No.  Id     Name      Score   Grade\n";
+        cout << line << endl;
+
+        while (InFile >> Id >> Name >> Score) {
+            n++;
+            char grade;
+            if (Score >= 80) {
+                grade = 'A';
+            } else if (Score >= 70) {
+                grade = 'B';
+            } else if (Score >= 60) {
+                grade = 'C';
+            } else if (Score >= 50) {
+                grade = 'D';
+            } else {
+                grade = 'F';
+            }
+
+            cout << right << setw(3) << n << " : " << left << setw(6) << Id << " " << setw(10) << Name << " " << setw(5) << Score << " " << grade << endl;
+        }
+
+        InFile.close();
+        cout << "\nPress Enter to continue";
+        cin.ignore();
+        cin.get();
+    } else {
+        cout << "File could not be opened." << endl;
+    }
+}
